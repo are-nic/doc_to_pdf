@@ -1,14 +1,20 @@
 import sys
-import os
+import os,os.path
 import comtypes.client
 
 wdFormatPDF = 17
 
-in_file = os.path.abspath(r'C:\Users\Руслан\Desktop\new\a1.doc')
-out_file = os.path.abspath(r'C:\Users\Руслан\Desktop\new\a1.pdf')
+input_dir = r'C:\Users\Руслан\Desktop\ежегодная проверка знаний'
+output_dir = r'C:\Users\Руслан\Desktop\pdf'
 
-word = comtypes.client.CreateObject('Word.Application')
-doc = word.Documents.Open(in_file)
-doc.SaveAs(out_file, FileFormat=wdFormatPDF)
-doc.Close()
-word.Quit()
+for subdir, dirs, files in os.walk(input_dir):
+    for file in files:
+        in_file = os.path.join(subdir, file)
+        output_file = file.split('.')[0]
+        out_file = output_dir + output_file + '.pdf'
+        word = comtypes.client.CreateObject('Word.Application')
+
+        doc = word.Documents.Open(in_file)
+        doc.SaveAs(out_file, FileFormat=wdFormatPDF)
+        doc.Close()
+        word.Quit()
